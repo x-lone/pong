@@ -17,4 +17,8 @@
 #define BALL_SIZE 4
 #define BALL_VEL 2
 
+#define PADDLE_WIDTH 4
+#define PADDLE_HEIGHT 24
+#define PADDLE_VEL 2
+
 #endif

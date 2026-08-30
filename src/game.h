@@ -3,11 +3,13 @@
 
 #include "main.h"
 #include "ball.h"
+#include "paddle.h"
 
 struct Game {
     SDL_Window *window;
     SDL_Renderer *renderer;
     struct Ball *ball;
+    struct Paddle *paddle;
     SDL_Event event;
     bool is_running;
     bool is_playing;

@@ -10,8 +10,8 @@ bool ball_new(struct Ball **ball, SDL_Renderer *renderer) {
 
     b->renderer = renderer;
 
-    b->rect.x = 10;
-    b->rect.y = 10;
+    b->rect.x = WINDOW_WIDTH / 2;
+    b->rect.y = WINDOW_HEIGHT / 2;
     b->rect.w = BALL_SIZE;
     b->rect.h = BALL_SIZE;
 
@@ -32,6 +32,19 @@ void ball_free(struct Ball **ball) {
         *ball = NULL;
 
         printf("Free Ball.\n");
+    }
+}
+
+void ball_paddle_collision(struct Ball *b, SDL_FRect paddle_rect) {
+    float ball_center = b->rect.x + b->rect.w / 2;
+    float window_midpoint = WINDOW_WIDTH / 2;
+
+    if (SDL_HasRectIntersectionFloat(&b->rect, &paddle_rect)) {
+        if (ball_center > window_midpoint) {
+            b->x_vel = -BALL_VEL;
+        } else if (ball_center < window_midpoint) { 
+            b->x_vel = BALL_VEL;
+        }
     }
 }
 

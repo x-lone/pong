@@ -23,12 +23,20 @@ bool game_new(struct Game **game) {
         return false;
     }
 
+    if (!paddle_new(&g->paddle, g->renderer)) {
+        return false;
+    }
+
     return true;
 }
 
 void game_free(struct Game **game) {
     if (*game) {
         struct Game *g = *game;
+
+        if (g->paddle) {
+            paddle_free(&g->paddle);
+        }
 
         if (g->ball) {
             ball_free(&g->ball);
@@ -78,7 +86,10 @@ bool game_events(struct Game *g) {
 }
 
 void game_update(struct Game *g) {
+    ball_paddle_collision(g->ball, paddle_get_rect(g->paddle));
+        
     ball_update(g->ball);
+    paddle_update(g->paddle);
 }
 
 void game_draw(struct Game *g) {
@@ -86,6 +97,7 @@ void game_draw(struct Game *g) {
     SDL_RenderClear(g->renderer);
 
     ball_draw(g->ball);
+    paddle_draw(g->paddle);
 
     SDL_RenderPresent(g->renderer);
 }
