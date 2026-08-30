@@ -23,7 +23,11 @@ bool game_new(struct Game **game) {
         return false;
     }
 
-    if (!paddle_new(&g->paddle, g->renderer)) {
+    if (!player_paddle_new(&g->player_paddle, g->renderer)) {
+        return false;
+    }
+
+    if (!ai_paddle_new(&g->ai_paddle, g->renderer)) {
         return false;
     }
 
@@ -34,8 +38,12 @@ void game_free(struct Game **game) {
     if (*game) {
         struct Game *g = *game;
 
-        if (g->paddle) {
-            paddle_free(&g->paddle);
+        if (g->ai_paddle) {
+            ai_paddle_free(&g->ai_paddle);
+        }
+
+        if (g->player_paddle) {
+            player_paddle_free(&g->player_paddle);
         }
 
         if (g->ball) {
@@ -86,10 +94,12 @@ bool game_events(struct Game *g) {
 }
 
 void game_update(struct Game *g) {
-    ball_paddle_collision(g->ball, paddle_get_rect(g->paddle));
+    ball_paddle_collision(g->ball, g->player_paddle->rect);
+    ball_paddle_collision(g->ball, g->ai_paddle->rect);
         
     ball_update(g->ball);
-    paddle_update(g->paddle);
+    player_paddle_update(g->player_paddle);
+    ai_paddle_update(g->ai_paddle, g->ball->rect);
 }
 
 void game_draw(struct Game *g) {
@@ -97,7 +107,8 @@ void game_draw(struct Game *g) {
     SDL_RenderClear(g->renderer);
 
     ball_draw(g->ball);
-    paddle_draw(g->paddle);
+    player_paddle_draw(g->player_paddle);
+    ai_paddle_draw(g->ai_paddle);
 
     SDL_RenderPresent(g->renderer);
 }

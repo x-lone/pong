@@ -3,13 +3,15 @@
 
 #include "main.h"
 #include "ball.h"
-#include "paddle.h"
+#include "player_paddle.h"
+#include "ai_paddle.h"
 
 struct Game {
     SDL_Window *window;
     SDL_Renderer *renderer;
     struct Ball *ball;
-    struct Paddle *paddle;
+    struct Player_Paddle *player_paddle;
+    struct AI_Paddle *ai_paddle;
     SDL_Event event;
     bool is_running;
     bool is_playing;

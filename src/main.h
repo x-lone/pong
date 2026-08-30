@@ -19,6 +19,7 @@
 
 #define PADDLE_WIDTH 4
 #define PADDLE_HEIGHT 24
+#define PADDLE_HORIZONTAL_OFFSET 10
 #define PADDLE_VEL 2
 
 #endif
