@@ -11,7 +11,10 @@
 #define SDL_FLAGS SDL_INIT_VIDEO
 
 #define WINDOW_TITLE "Pong"
-#define WINDOW_HEIGHT 160
-#define WINDOW_WIDTH 192
+#define WINDOW_HEIGHT 216
+#define WINDOW_WIDTH 280
+
+#define BALL_SIZE 4
+#define BALL_VEL 2
 
 #endif
