@@ -100,6 +100,10 @@ void game_update(struct Game *g) {
     ball_update(g->ball);
     player_paddle_update(g->player_paddle);
     ai_paddle_update(g->ai_paddle, g->ball->rect);
+
+    if (ball_in_goal(g->ball)) {
+        ball_reset(g->ball);
+    }
 }
 
 void game_draw(struct Game *g) {

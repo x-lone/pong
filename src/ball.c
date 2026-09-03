@@ -10,14 +10,11 @@ bool ball_new(struct Ball **ball, SDL_Renderer *renderer) {
 
     b->renderer = renderer;
 
-    b->rect.x = WINDOW_WIDTH / 2;
-    b->rect.y = WINDOW_HEIGHT / 2;
     b->rect.w = BALL_SIZE;
     b->rect.h = BALL_SIZE;
-
-    b->x_vel = BALL_VEL * (rand() % 2 ? 1 : -1);
-    b->y_vel = BALL_VEL * (rand() % 2 ? 1 : -1);
     
+    ball_reset(b);
+
     return true;
 }
 
@@ -35,38 +32,63 @@ void ball_free(struct Ball **ball) {
     }
 }
 
+void ball_reset(struct Ball *b) {
+    b->rect.x = WINDOW_WIDTH / 2;
+    b->rect.y = WINDOW_HEIGHT / 2;
+
+    b->x_dir = (float) (rand() % 2 ? BALL_SERVE_SPEED : -BALL_SERVE_SPEED);
+    b->y_dir = (float) (rand() % 2 ? BALL_SERVE_SPEED : -BALL_SERVE_SPEED);
+
+    b->speed = 1.0f;
+
+    b->spawn_delay = SPAWN_DELAY;
+}
+
+bool ball_in_goal(struct Ball *b) {
+    if (b->rect.x + b->rect.w > WINDOW_WIDTH) {
+        return true;
+    } else if (b->rect.x < 0) {
+        return true;
+    }
+
+    return false;
+}
+
 void ball_paddle_collision(struct Ball *b, SDL_FRect paddle_rect) {
     float ball_center = b->rect.y + b->rect.h / 2;
     float paddle_center = paddle_rect.y + paddle_rect.h / 2;
     float offset = ball_center - paddle_center;
 
     if (SDL_HasRectIntersectionFloat(&b->rect, &paddle_rect)) {
-        b->x_vel = b->rect.x > WINDOW_WIDTH / 2 ? -BALL_VEL : BALL_VEL;
+        b->x_dir = b->rect.x > WINDOW_WIDTH / BALL_SPEED ? -BALL_SPEED : BALL_SPEED;
 
-        b->y_vel = offset / 5;
+        b->y_dir = offset / 5;
 
-        if (b->y_vel > BALL_VEL) {
-            b->y_vel = BALL_VEL;
-        } else if (b->y_vel < -BALL_VEL) {
-            b->y_vel = -BALL_VEL;
+        if (b->y_dir > BALL_SPEED) {
+            b->y_dir = BALL_SPEED;
+        } else if (b->y_dir < -BALL_SPEED) {
+            b->y_dir = -BALL_SPEED;
         }
+
+        b->speed *= BALL_SPEED_MULTI;
     }
 }
 
 void ball_update(struct Ball *b) {
-    b->rect.x += b->x_vel;
-    b->rect.y += b->y_vel;
-
-    if (b->rect.x + b->rect.w > WINDOW_WIDTH) {
-        b->x_vel = -fabsf(b->x_vel);
-    } else if (b->rect.x < 0) {
-        b->x_vel = fabsf(b->x_vel);
+    if (b->spawn_delay > 0) {
+        b->spawn_delay--;
+        return;
     }
 
+    printf("x_dir: %f\n", b->x_dir * b->speed);
+
+    b->rect.x += b->x_dir * b->speed;
+    b->rect.y += b->y_dir * b->speed;
+    
     if (b->rect.y + b->rect.h > WINDOW_HEIGHT) {
-        b->y_vel = -fabsf(b->y_vel);
+        b->y_dir = -fabsf(b->y_dir);
     } else if (b->rect.y < 0) {
-        b->y_vel = fabsf(b->y_vel);
+        b->y_dir = fabsf(b->y_dir);
     }
 }
 

@@ -16,7 +16,10 @@
 #define WINDOW_WIDTH 280
 
 #define BALL_SIZE 4
-#define BALL_VEL (float) 2.5
+#define BALL_SPEED 2.5f
+#define BALL_SPEED_MULTI 1.05f
+#define BALL_SERVE_SPEED 1.0f
+#define SPAWN_DELAY 50
 
 #define PADDLE_WIDTH 4
 #define PADDLE_HEIGHT 24
