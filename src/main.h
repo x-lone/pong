@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <math.h>
 
 #define SDL_FLAGS SDL_INIT_VIDEO
 
@@ -15,7 +16,7 @@
 #define WINDOW_WIDTH 280
 
 #define BALL_SIZE 4
-#define BALL_VEL 2
+#define BALL_VEL (float) 2.5
 
 #define PADDLE_WIDTH 4
 #define PADDLE_HEIGHT 24

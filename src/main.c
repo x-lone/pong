@@ -1,6 +1,8 @@
 #include "game.h"
 
 int main(void) {
+    srand((unsigned int)time(NULL));
+
     bool exit_status = EXIT_FAILURE;
 
     struct Game *game = NULL;
