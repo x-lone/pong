@@ -32,7 +32,14 @@ Build and Run Pong
 gcc -Wall -Wextra -Wpedantic -fmax-errors=5 \
     src/*.c \
     -o pong \
-    -lSDL3
+    -lSDL3 \
+    -lSDL3_image
 
 ./pong
 ```
+
+## Credits
+
+The media-loading and some of the score system code were based on techniques demonstrated in Programming Rainbow's Minesweeper / Prato Fiorito YouTube tutorial series.
+
+The code in this project was adapted and modified for use in this Pong project.

@@ -33,8 +33,8 @@ void ball_free(struct Ball **ball) {
 }
 
 void ball_reset(struct Ball *b) {
-    b->rect.x = WINDOW_WIDTH / 2;
-    b->rect.y = WINDOW_HEIGHT / 2;
+    b->rect.x = (WINDOW_WIDTH - BALL_SIZE) / 2;
+    b->rect.y = (WINDOW_HEIGHT - BALL_SIZE) / 2;
 
     b->x_dir = (float) (rand() % 2 ? BALL_SERVE_SPEED : -BALL_SERVE_SPEED);
     b->y_dir = (float) (rand() % 2 ? BALL_SERVE_SPEED : -BALL_SERVE_SPEED);
@@ -85,9 +85,9 @@ void ball_update(struct Ball *b) {
     b->rect.x += b->x_dir * b->speed;
     b->rect.y += b->y_dir * b->speed;
     
-    if (b->rect.y + b->rect.h > WINDOW_HEIGHT) {
+    if (b->rect.y + b->rect.h > WINDOW_HEIGHT - BORDER_THICKNESS) {
         b->y_dir = -fabsf(b->y_dir);
-    } else if (b->rect.y < 0) {
+    } else if (b->rect.y < 0 + BORDER_THICKNESS) {
         b->y_dir = fabsf(b->y_dir);
     }
 }

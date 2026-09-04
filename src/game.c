@@ -3,6 +3,7 @@
 
 bool game_events(struct Game *g);
 void game_update(struct Game *g);
+void game_draw_border(struct Game *g);
 void game_draw(struct Game *g);
 
 bool game_new(struct Game **game) {
@@ -31,12 +32,28 @@ bool game_new(struct Game **game) {
         return false;
     }
 
+    if (!score_new(&g->player_score, g->renderer)) {
+        return false;
+    }
+
+    if (!score_new(&g->ai_score, g->renderer)) {
+        return false;
+    }
+
     return true;
 }
 
 void game_free(struct Game **game) {
     if (*game) {
         struct Game *g = *game;
+
+        if (g->ai_score) {
+            score_free(&g->ai_score);
+        }
+
+        if (g->player_score) {
+            score_free(&g->player_score);
+        }
 
         if (g->ai_paddle) {
             ai_paddle_free(&g->ai_paddle);
@@ -102,13 +119,40 @@ void game_update(struct Game *g) {
     ai_paddle_update(g->ai_paddle, g->ball->rect);
 
     if (ball_in_goal(g->ball)) {
+        if (g->ball->rect.x < 0) {
+            score_increment(g->ai_score);
+        } else {
+            score_increment(g->player_score);
+        }
+
         ball_reset(g->ball);
     }
+}
+
+void game_draw_border(struct Game *g) {
+    SDL_SetRenderDrawColor(g->renderer, 255, 255, 255, 255);
+    SDL_FRect dash_rect = {WINDOW_WIDTH / 2.0f - BORDER_THICKNESS / 2, 0, BORDER_THICKNESS, BORDER_DASH_SIZE};
+
+    for (int y = 0; y < WINDOW_HEIGHT; y += BORDER_DASH_SIZE * 2) {
+        dash_rect.y = (float)y;
+        SDL_RenderFillRect(g->renderer, &dash_rect);
+    }
+
+    SDL_FRect line_rect = {0, 0, WINDOW_WIDTH, BORDER_THICKNESS};
+    SDL_RenderFillRect(g->renderer, &line_rect);
+
+    line_rect.y = WINDOW_HEIGHT - BORDER_THICKNESS;
+    SDL_RenderFillRect(g->renderer, &line_rect);
 }
 
 void game_draw(struct Game *g) {
     SDL_SetRenderDrawColor(g->renderer, 0, 0, 0, 255);
     SDL_RenderClear(g->renderer);
+
+    game_draw_border(g);
+
+    score_draw(g->player_score, WINDOW_WIDTH / 2 - NUMBER_WIDTH * 2 - BORDER_THICKNESS * 2, BORDER_THICKNESS * 2);
+    score_draw(g->ai_score, WINDOW_WIDTH / 2 + BORDER_THICKNESS * 2, BORDER_THICKNESS * 2);
 
     ball_draw(g->ball);
     player_paddle_draw(g->player_paddle);

@@ -5,6 +5,7 @@
 #include "ball.h"
 #include "player_paddle.h"
 #include "ai_paddle.h"
+#include "score.h"
 
 struct Game {
     SDL_Window *window;
@@ -12,6 +13,8 @@ struct Game {
     struct Ball *ball;
     struct Player_Paddle *player_paddle;
     struct AI_Paddle *ai_paddle;
+    struct Score *player_score;
+    struct Score *ai_score;
     SDL_Event event;
     bool is_running;
     bool is_playing;

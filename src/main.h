@@ -3,6 +3,7 @@
 
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_main.h>
+#include <SDL3_image/SDL_image.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -15,6 +16,9 @@
 #define WINDOW_HEIGHT 216
 #define WINDOW_WIDTH 280
 
+#define BORDER_THICKNESS 4
+#define BORDER_DASH_SIZE 10
+
 #define BALL_SIZE 4
 #define BALL_SPEED 2.5f
 #define BALL_SPEED_MULTI 1.05f
@@ -25,5 +29,8 @@
 #define PADDLE_HEIGHT 24
 #define PADDLE_HORIZONTAL_OFFSET 10
 #define PADDLE_VEL 2
+
+#define NUMBER_WIDTH 20
+#define NUMBER_HEIGHT 36
 
 #endif
