@@ -80,8 +80,6 @@ void ball_update(struct Ball *b) {
         return;
     }
 
-    printf("x_dir: %f\n", b->x_dir * b->speed);
-
     b->rect.x += b->x_dir * b->speed;
     b->rect.y += b->y_dir * b->speed;
     
